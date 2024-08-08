@@ -26,7 +26,7 @@ function sync_based_on_visibility(frm) {
                 if(frm.doc.sync_based_on){
                     if (frm.doc.woocommerce_item_id || frm.doc.item_code){
                         frappe.call({
-                            method:"woo_sync.api.sync_single_item_to_woocommerce",
+                            method:"woocommerce_sync.api.sync_single_item_to_woocommerce",
                             freeze: true,
                             freeze_message: __('Syncing Item...')                    
                         }).then(() => {
@@ -48,7 +48,7 @@ function sync_based_on_visibility(frm) {
             } else {
                 if (frm.doc.woocommerce_item_id || frm.doc.item_code){
                     frappe.call({
-                        method:"woo_sync.api.sync_single_item_to_woocommerce",
+                        method:"woocommerce_sync.api.sync_single_item_to_woocommerce",
                         freeze: true,
                         freeze_message: __('Syncing Item...')                            
                     }).then(() => {
@@ -69,7 +69,7 @@ function sync_based_on_visibility(frm) {
 
         frm.add_custom_button(__('Sync Items to WooCommerce'), function(){
             frappe.call({
-                method:"woo_sync.api.bulk_sync_items_to_woocommerce",
+                method:"woocommerce_sync.api.bulk_sync_items_to_woocommerce",
                 freeze: true,
                 freeze_message: __('Syncing Items...')
             })

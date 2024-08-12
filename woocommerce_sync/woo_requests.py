@@ -6,6 +6,8 @@ from .utils import make_woocommerce_log
 from .exceptions import woocommerceError
 from requests_oauthlib import OAuth1Session
 
+per_page = 100
+
 def get_woocommerce_settings():
     d = frappe.get_doc("WooCommerce Sync", "WooCommerce Sync")
     
@@ -99,3 +101,58 @@ def put_request(path, data):
     # make_woocommerce_log(title="SUCCESS: PUT", status="Success", method="put_request", message=str(r.json()), request_data=data, exception=True)
 
     return r.json()
+
+# TODO: Fix This
+def get_filtering_condition():
+    woocommerce_settings = get_woocommerce_settings()
+
+    # if woocommerce_settings.last_sync_datetime:
+    #     last_sync_datetime = get_datetime(woocommerce_settings.last_sync_datetime)
+        
+    #     return "modified_after={0}".format(last_sync_datetime.isoformat() )
+    return ''
+
+def get_woocommerce_items(ignore_filter_conditions=False):
+    woocommerce_settings = get_woocommerce_settings()
+    woocommerce_products = []
+    filter_condition = ''
+    page = 1
+
+    if not ignore_filter_conditions:
+        filter_condition = get_filtering_condition()
+
+        if woocommerce_settings['sync_only_published'] == 1:
+            filter_condition += "status=publish"
+
+    while True:
+        r = get_request('wp-json/wc/v3/products?per_page={0}&page={1}&{2}'.format(per_page, page, filter_condition))
+
+        if not r:
+            break
+
+        woocommerce_products.extend(r)
+        page += 1
+
+    return woocommerce_products
+
+def get_woocommerce_item_variants(woocommerce_product_id):
+    woocommerce_product_variants = []
+    filter_condition = ''
+
+    while True:
+        r = get_request('wp-json/wc/v3/products/{0}/variations?per_page={1}&page={2}&{3}'.format(woocommerce_product_id, per_page, page, filter_condition))
+
+        if not r:
+            break
+
+        woocommerce_product_variants.extend(r)
+        page += 1
+
+    return woocommerce_product_variants
+
+# def get_woocommerce_item_image(woocommerce_product_id):
+#     return get_request("products/{0}".format(woocommerce_product_id))["images"]
+
+
+# def get_woocommerce_tax(woocommerce_tax_id):
+#     return get_request("taxes/{0}".format(woocommerce_tax_id))

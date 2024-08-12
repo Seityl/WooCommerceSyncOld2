@@ -7,7 +7,32 @@
  "engine": "InnoDB",
  "field_order": [
   "item_code",
-  "woocommerce_item_id"
+  "section_break_qtgl",
+  "woocommerce_item_id",
+  "sync_to_woocommerce",
+  "is_stock_item",
+  "has_variants",
+  "column_break_xvla",
+  "image",
+  "section_break_nkss",
+  "item_name",
+  "woocommerce_variant_id",
+  "valuation_method",
+  "stock_uom",
+  "weight_uom",
+  "column_break_svrv",
+  "item_group",
+  "variant_of",
+  "default_warehouse",
+  "stock_keeping_unit",
+  "weight_per_unit",
+  "section_break_jjms",
+  "attributes",
+  "section_break_mkvn",
+  "description",
+  "woocommerce_description",
+  "woocommerce_short_description",
+  "web_long_description"
  ],
  "fields": [
   {
@@ -20,11 +45,134 @@
    "fieldname": "woocommerce_item_id",
    "fieldtype": "Data",
    "label": "WooCommerce Item ID"
+  },
+  {
+   "fieldname": "woocommerce_variant_id",
+   "fieldtype": "Data",
+   "label": "WooCommerce Variant ID"
+  },
+  {
+   "fieldname": "variant_of",
+   "fieldtype": "Data",
+   "label": "Variant Of"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_stock_item",
+   "fieldtype": "Check",
+   "label": "Is Stock Item"
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "valuation_method",
+   "fieldtype": "Data",
+   "label": "Valuation Method"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "woocommerce_description",
+   "fieldtype": "Small Text",
+   "label": "WooCommerce Description"
+  },
+  {
+   "fieldname": "woocommerce_short_description",
+   "fieldtype": "Small Text",
+   "label": "WooCommerce Short Description"
+  },
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Data",
+   "label": "Item Group"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_variants",
+   "fieldtype": "Check",
+   "label": "Has Variants"
+  },
+  {
+   "fieldname": "attributes",
+   "fieldtype": "Table",
+   "label": "Attributes",
+   "options": "Item Attribute Value"
+  },
+  {
+   "fieldname": "stock_uom",
+   "fieldtype": "Data",
+   "label": "Stock UOM"
+  },
+  {
+   "fieldname": "stock_keeping_unit",
+   "fieldtype": "Data",
+   "label": "Stock Keeping Unit"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Data",
+   "label": "Default Warehouse"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "weight_uom",
+   "fieldtype": "Data",
+   "label": "Weight UOM"
+  },
+  {
+   "fieldname": "weight_per_unit",
+   "fieldtype": "Data",
+   "label": "Weight Per Unit"
+  },
+  {
+   "fieldname": "web_long_description",
+   "fieldtype": "Small Text",
+   "label": "Web Long Description"
+  },
+  {
+   "fieldname": "section_break_nkss",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_svrv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xvla",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "sync_to_woocommerce",
+   "fieldtype": "Check",
+   "label": "Sync To WooCommerce"
+  },
+  {
+   "fieldname": "section_break_mkvn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_qtgl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_jjms",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-07 13:35:41.593684",
+ "modified": "2024-08-10 11:18:16.232956",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Item",

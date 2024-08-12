@@ -58,3 +58,8 @@ name=None, request_data={}):
 		
 		log.save(ignore_permissions=True)
 		frappe.db.commit()
+
+def disable_woocommerce_sync_on_exception():
+	frappe.db.rollback()
+	frappe.db.set_value("WooCommerce Config", None, "enable_woocommerce", 0)
+	frappe.db.commit()

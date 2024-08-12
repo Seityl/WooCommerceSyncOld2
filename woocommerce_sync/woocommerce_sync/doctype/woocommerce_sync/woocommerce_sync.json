@@ -6,6 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "woocommerce_url",
+  "column_break_hnyk",
+  "last_sync_datetime",
   "section_break_uxzv",
   "api_key",
   "column_break_nybd",
@@ -15,13 +17,17 @@
   "column_break_glix",
   "enable_sync",
   "verify_ssl_wip",
+  "sync_only_published",
   "section_break_pzow",
   "sync_based_on",
   "column_break_hfze",
   "item_code",
   "woocommerce_item_id",
   "section_break_qhec",
-  "warehouse"
+  "warehouse",
+  "price_list",
+  "valuation_method",
+  "weight_unit"
  ],
  "fields": [
   {
@@ -73,7 +79,7 @@
    "default": "0",
    "fieldname": "enable_sync",
    "fieldtype": "Check",
-   "label": "Enable Sync (WIP)"
+   "label": "Enable Sync"
   },
   {
    "default": "0",
@@ -116,12 +122,43 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "WooCommerce Item ID"
+  },
+  {
+   "default": "0",
+   "fieldname": "sync_only_published",
+   "fieldtype": "Check",
+   "label": "Sync Only Published"
+  },
+  {
+   "fieldname": "column_break_hnyk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync_datetime",
+   "fieldtype": "Data",
+   "label": "Last Sync Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Data",
+   "label": "Price List"
+  },
+  {
+   "fieldname": "valuation_method",
+   "fieldtype": "Data",
+   "label": "Valuation Method"
+  },
+  {
+   "fieldname": "weight_unit",
+   "fieldtype": "Data",
+   "label": "Weight Unit"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-08-07 11:34:01.880682",
+ "modified": "2024-08-09 12:11:29.082232",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Sync",

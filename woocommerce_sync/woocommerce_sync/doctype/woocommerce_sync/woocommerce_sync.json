@@ -22,10 +22,11 @@
   "sync_based_on",
   "column_break_hfze",
   "item_code",
-  "woocommerce_item_id",
+  "woocommerce_product_id",
   "section_break_qhec",
   "warehouse",
   "price_list",
+  "column_break_ouln",
   "valuation_method",
   "weight_unit"
  ],
@@ -95,7 +96,7 @@
    "fieldname": "sync_based_on",
    "fieldtype": "Select",
    "label": "Sync Based On",
-   "options": "Item Code\nWooCommerce Item ID"
+   "options": "Item Code\nWooCommerce Product ID"
   },
   {
    "fieldname": "section_break_qhec",
@@ -116,12 +117,6 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Item Code"
-  },
-  {
-   "fieldname": "woocommerce_item_id",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "WooCommerce Item ID"
   },
   {
    "default": "0",
@@ -153,12 +148,22 @@
    "fieldname": "weight_unit",
    "fieldtype": "Data",
    "label": "Weight Unit"
+  },
+  {
+   "fieldname": "column_break_ouln",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "woocommerce_product_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "WooCommerce Product ID"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-08-09 12:11:29.082232",
+ "modified": "2024-08-13 15:11:26.597988",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Sync",

@@ -7,34 +7,22 @@ from .exceptions import woocommerceError
 from frappe.utils import get_datetime, cint
 from .utils import make_woocommerce_log, disable_woocommerce_sync_for_item, disable_woocommerce_sync_on_exception
 from .woo_requests import get_woocommerce_items, get_woocommerce_settings, get_request, post_request, put_request
-from .item_sync import sync_products, bulk_sync, sync_individual_item_by_item_code, get_item_codes_and_ids_from_woocommerce, add_woocommerce_items_to_erp, get_woocommerce_items_from_doctype, update_item_stock_qty
+from .item_sync import get_item_code_from_woocommerce_item_id, sync_products, sync_individual_item, get_item_codes_and_ids_from_woocommerce, add_woocommerce_items_to_erp, get_woocommerce_items_from_doctype, update_item_stock_qty
 
-@frappe.whitelist()
-def bulk_sync_items_to_woocommerce():
-    # make_woocommerce_log(title="Sync", status="Success", method="bulk_sync_items_to_woocommerce", message="Published only!")
-
-    # add_woocommerce_items_to_erp()
-    # bulk_sync()
-    get_woocommerce_items()
-    # make_woocommerce_log(title="Item Codes", status="Success", method="bulk_sync_items_to_woocommerce", message=str(item_codes))
-
-# TODO: Finish this
 @frappe.whitelist()
 def sync_single_item_to_woocommerce():
     woocommerce_settings = get_woocommerce_settings()
     sync_based_on = woocommerce_settings["sync_based_on"] 
 
-    # make_woocommerce_log(title="Sync Based On", status="Success", method="sync_single_item_to_woocommerce", message=sync_based_on)
-    
-    # if (sync_based_on == "WooCommerce Item ID"):
-        # sync_item_by_woocommerce_id()
+    if (sync_based_on == "WooCommerce Item ID"):
+        sync_individual_item(woocommerce_item_id=woocommerce_settings['woocommerce_item_id'])
 
     if (sync_based_on == "Item Code"):
-        sync_individual_item_by_item_code()
+        sync_individual_item(item_code=woocommerce_settings['item_code'])
 
 # TODO: Finish this
 @frappe.whitelist()
-def sync_woocommerce_item_list():
+def sync_woocommerce_items():
     woocommerce_settings = frappe.get_doc("WooCommerce Sync")
 
     make_woocommerce_log(title="Item Sync Job Queued", status="Queued", method=frappe.local.form_dict.cmd, message="Item Sync Job Queued")

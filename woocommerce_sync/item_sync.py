@@ -10,12 +10,12 @@ from .woo_requests import get_woocommerce_items, get_woocommerce_settings, get_r
 
 per_page = 100  # Default maximum number of items per response page
 
-def sync_individual_item(item_code=None, woocommerce_item_id=None):
+def sync_individual_item(item_code=None, woocommerce_item_id=None, price_list=None):
     if item_code or woocommerce_item_id:
         if item_code:
-            make_woocommerce_log(title="Item Code 1", status="Error", method="update_item_stock_qty", message=item_code, request_data=None)
             try:
                 update_item_stock_qty(item_code=item_code)
+                update_item_price(item_code, price_list)
 
             except woocommerceError as e:
                 make_woocommerce_log(title="{0}".format(e), status="Error", method="sync_single_item_to_woocommerce", message=frappe.get_traceback(), request_data=item_code, exception=True)
@@ -28,11 +28,12 @@ def sync_individual_item(item_code=None, woocommerce_item_id=None):
                     make_woocommerce_log(title="{0}".format(e), status="Error", method="sync_single_item_to_woocommerce", message=frappe.get_traceback(), request_data=item_code, exception=True)
 
         if woocommerce_item_id:
-            make_woocommerce_log(title="WooCommerce Item ID", status="Error", method="update_item_stock_qty", message=woocommerce_item_id, request_data=None)
+            item_code = get_item_code_from_woocommerce_item_id(woocommerce_item_id)
 
             try:
                 update_item_stock_qty(woocommerce_item_id=woocommerce_item_id)
-            
+                update_item_price(item_code, price_list, woocommerce_item_id=woocommerce_item_id)
+
             except woocommerceError as e:
                 make_woocommerce_log(title="{0}".format(e), status="Error", method="sync_single_item_to_woocommerce", message=frappe.get_traceback(), request_data=woocommerce_item_id, exception=True)
 
@@ -53,6 +54,7 @@ def sync_products(price_list, warehouse, enable_sync=False):
 
 def sync_woocommerce_items(warehouse):    
     for woocommerce_item in get_woocommerce_items():
+        make_woocommerce_log(title="WooCommerce Item", status="Success", method="get_product_update_dict", message=str(woocommerce_item))
         try:
             make_item(warehouse, woocommerce_item)
 
@@ -66,6 +68,32 @@ def sync_woocommerce_items(warehouse):
             else:
                 make_woocommerce_log(title="{0}".format(e), status="Error", method="sync_woocommerce_items", message=frappe.get_traceback(), request_data=woocommerce_item, exception=True)
 
+def get_item_price(item_code, price_list):
+    values = {
+        'item_code': item_code,
+        'price_list': price_list
+        }
+    if values:
+        try:
+            item_price = frappe.db.sql("""
+                SELECT
+                    `price_list_rate`
+                FROM `tabItem Price`
+                WHERE `item_code` = %(item_code)s
+                    AND `price_list` = %(price_list)s
+            """, values=values, as_dict=1)[0]['price_list_rate']
+                
+            if item_price:
+                return item_price
+            else:
+                return None
+
+        except Exception as e:
+            make_woocommerce_log(title="{0}".format(e), status="Error", method="get_item_price", message=frappe.get_traceback(), request_data=item_code, exception=True)
+            return None
+    else:
+        make_woocommerce_log(title="ERROR: get_item_price", status="Error", method="get_item_price", message="No Item data")
+    
 def get_woocommerce_items_from_doctype():
     woocommerce_items = frappe.get_all('WooCommerce Item',['name','woocommerce_item_id'])
 
@@ -121,12 +149,16 @@ def get_categories(woocommerce_item, is_variant=False):
             pass
     return categories
 
-def get_product_update_dict(actual_qty):
+def get_product_update_dict(actual_qty=None, item_price=None):
     item_data = {}
-    item_data["stock_quantity"] = "{0}".format(actual_qty)
-    item_data["manage_stock"] = "1"
 
-    # make_woocommerce_log(title="Item Data", status="Success", method="get_product_update_dict", message="Item Data: {0}".format(item_data))
+    if actual_qty:
+        item_data["stock_quantity"] = "{0}".format(actual_qty)
+        item_data["manage_stock"] = "1"
+
+    if item_price:
+        item_data["price"] = item_price
+        item_data["regular_price"] = item_price
 
     return item_data
 
@@ -395,13 +427,15 @@ def update_item_stock(item_code, woocommerce_settings, woocommerce_item_id=None)
 
     resource = "wp-json/wc/v3/products/{0}".format(woocommerce_item_id)
 
-    item_data = get_product_update_dict(qty)
+    item_data = get_product_update_dict(actual_qty=qty)
     
     # make_woocommerce_log(title="Item Data", status="Success", method="get_product_update", message="Item Data: {0}".format(item_data))
     # make_woocommerce_log(title="Resource", status="Success", method="get_product_update", message="Resource: {0}".format(resource))
     
     try:
         post_request(resource, item_data)
+        make_woocommerce_log(title="Updated Stock of {0}".format(item_code), status="Success", method="update_item_price",
+        message="Stock Quantity: {0}\nManage Stock: {1}".format(item_data['stock_quantity'], item_data['manage_stock']))
         
     except requests.exceptions.HTTPError as e:
         if e.args[0] and e.args[0].startswith("404"):
@@ -434,6 +468,38 @@ def update_item(item_details, item_dict):
     item.update(item_dict)
     item.flags.ignore_mandatory = True
     item.save()
+
+#TODO: Finish this
+def update_item_price(item_code, price_list, woocommerce_item_id=None):
+    item_price = get_item_price(item_code, price_list)
+
+    # make_woocommerce_log(title="Item Code", status="Success", method="update_item_price", message="Item Code: {0}".format(item_code))
+    # make_woocommerce_log(title="Price List", status="Success", method="update_item_price", message="Price List: {0}".format(price_list))
+    # make_woocommerce_log(title="Item Price", status="Success", method="update_item_price", message="Item Price: {0}".format(item_price))
+
+    if not woocommerce_item_id:
+        woocommerce_item_id = get_woocommerce_item_id(item_code)
+
+    resource = "wp-json/wc/v3/products/{0}".format(woocommerce_item_id)
+
+    item_data = get_product_update_dict(item_price=item_price)
+    
+    # make_woocommerce_log(title="Item Data", status="Success", method="get_product_update", message="Item Data: {0}".format(item_data))
+    # make_woocommerce_log(title="Resource", status="Success", method="get_product_update", message="Resource: {0}".format(resource))
+    
+    try:
+        post_request(resource, item_data)
+        make_woocommerce_log(title="Updated Price of {0}".format(item_code), status="Success", method="update_item_price",
+        message="Price: {0}\nRegular Price: {1}".format(item_data['price'], item_data['regular_price']))
+        
+    except requests.exceptions.HTTPError as e:
+        if e.args[0] and e.args[0].startswith("404"):
+            make_woocommerce_log(title=e.message, status="Error", method="update_item_stock", message=frappe.get_traceback(),
+                request_data=item_data, exception=True)
+            # disable_woocommerce_sync_for_item(item)
+
+        else:
+            raise e
 
 def is_item_exists(item_dict, attributes=None, variant_of=None):
     # woocommerce_item_id = str(item_dict['woocommerce_item_id'])

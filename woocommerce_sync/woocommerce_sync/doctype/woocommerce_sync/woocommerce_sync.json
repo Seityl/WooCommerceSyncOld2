@@ -23,7 +23,7 @@
   "column_break_hfze",
   "item_code",
   "woocommerce_product_id",
-  "section_break_qhec",
+  "section_break_options",
   "warehouse",
   "price_list",
   "column_break_ouln",
@@ -99,13 +99,10 @@
    "options": "Item Code\nWooCommerce Product ID"
   },
   {
-   "fieldname": "section_break_qhec",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "warehouse",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Warehouse",
+   "options": "Warehouse",
    "reqd": 1
   },
   {
@@ -136,13 +133,15 @@
   },
   {
    "fieldname": "price_list",
-   "fieldtype": "Data",
-   "label": "Price List"
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List"
   },
   {
    "fieldname": "valuation_method",
-   "fieldtype": "Data",
-   "label": "Valuation Method"
+   "fieldtype": "Select",
+   "label": "Valuation Method",
+   "options": "FIFO\nMoving Average\nLIFO"
   },
   {
    "fieldname": "weight_unit",
@@ -158,12 +157,16 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "WooCommerce Product ID"
+  },
+  {
+   "fieldname": "section_break_options",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-08-13 15:11:26.597988",
+ "modified": "2024-08-15 09:21:40.001547",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Sync",

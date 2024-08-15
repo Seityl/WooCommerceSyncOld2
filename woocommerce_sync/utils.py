@@ -58,8 +58,19 @@ name=None, request_data={}):
 		
 		log.save(ignore_permissions=True)
 		frappe.db.commit()
-
+		
 def disable_woocommerce_sync_on_exception():
 	frappe.db.rollback()
-	frappe.db.set_value("WooCommerce Config", None, "enable_woocommerce", 0)
+	frappe.db.set_value("WooCommerce Sync", "WooCommerce Sync", "enable_sync", 0)
 	frappe.db.commit()
+
+def clear_woocommerce_logs():
+	woocommerce_logs = frappe.get_all('WooCommerce Log', fields=['name'])
+
+	if woocommerce_logs:
+		for woocommerce_log in woocommerce_logs:
+			frappe.delete_doc('WooCommerce Log', woocommerce_log['name'], ignore_permissions=True)
+
+		frappe.msgprint("Cleared Logs");
+	else:
+		frappe.msgprint("No Logs Found");

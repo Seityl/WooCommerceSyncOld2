@@ -26,6 +26,7 @@
   "section_break_options",
   "warehouse",
   "price_list",
+  "stock_unit_of_measure",
   "column_break_ouln",
   "valuation_method",
   "weight_unit"
@@ -161,12 +162,18 @@
   {
    "fieldname": "section_break_options",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stock_unit_of_measure",
+   "fieldtype": "Link",
+   "label": "Stock UOM",
+   "options": "UOM"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-08-15 09:21:40.001547",
+ "modified": "2024-08-15 15:54:02.753806",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Sync",

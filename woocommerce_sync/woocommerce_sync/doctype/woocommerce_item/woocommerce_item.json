@@ -122,6 +122,7 @@
   {
    "fieldname": "image",
    "fieldtype": "Image",
+   "hidden": 1,
    "label": "Image"
   },
   {
@@ -172,7 +173,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-10 11:18:16.232956",
+ "modified": "2024-08-15 16:01:14.228171",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Item",

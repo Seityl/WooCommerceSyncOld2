@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_rename": 1,
  "creation": "2024-08-07 10:55:16.886544",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -170,10 +169,9 @@
    "options": "UOM"
   }
  ],
- "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-08-15 15:54:02.753806",
+ "modified": "2024-08-16 10:32:42.158040",
  "modified_by": "Administrator",
  "module": "WooCommerce Sync",
  "name": "WooCommerce Sync",

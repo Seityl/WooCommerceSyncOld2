@@ -5,6 +5,7 @@ app_description = "Sync ERP V15 to WooCommerce using REST API."
 app_email = "francisbeatsproductions@gmail.com"
 app_license = "mit"
 # required_apps = []
+fixtures = ["Custom Field"]
 
 # Includes in <head>
 # ------------------
